@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pancakes Web Browser</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nav-height:45px;
+      --bg-start:#ffcc00;
+      --bg-end:#ff6600;
+      --nav-bg:#111;
+      --white:#ffffff;
+      --panel-radius:12px;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      padding:0;
+      font-family: 'Clash Display', sans-serif;
+      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+      color:var(--white);
+      overflow:hidden;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slideInLeft {
+      from { transform: translateX(-100%); opacity: 0; }
+      to   { transform: translateX(0); opacity: 1; }
+    }
+
+    .navbar{
+      position:fixed; top:0; left:0; right:0;
+      height:var(--nav-height);
+      background:var(--nav-bg);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 18px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.35);
+      z-index:1000;
+      animation: slideDown 0.8s cubic-bezier(0.25,1,0.5,1) forwards;
+    }
+    .navbar .left{ display:flex; align-items:center; font-weight:700; font-size:20px; color:var(--white); }
+    .navbar .left img.logo-img { height:32px; margin-right:8px; vertical-align:middle; }
+    .navbar .right{ display:flex; gap:10px; }
+    .nav-link{ color:var(--white); text-decoration:none; font-weight:700; font-size:16px; padding:6px 12px; border-radius:8px; transition:all .18s ease; }
+    .nav-link:hover{ background:#ff6a00; color:#111; }
+    .btn-download{ background:#111; color:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.25); }
+    .btn-download:hover{ background:#ff6a00; color:#111; }
+
+    /* Hamburger buton */
+    .hamburger {
+      display:none;
+      font-size:26px;
+      cursor:pointer;
+      color:#fff;
+    }
+
+    .stage{ height:calc(100vh - var(--nav-height) - 30px); margin-top:calc(var(--nav-height) + 10px); display:flex; align-items:center; justify-content:center; padding:10px; box-sizing:border-box; }
+    .center-wrap{ width:100%; max-width:1200px; display:flex; align-items:stretch; gap:18px; }
+
+    .content-panel {
+      background:#0f0f0f;
+      border-radius:var(--panel-radius);
+      box-shadow:0 10px 30px rgba(0,0,0,0.45);
+      padding:28px;
+      color:var(--white);
+      display:flex; flex-direction:column;
+      gap:14px;
+      min-height:40vh; height:70vh;
+      width:100%; max-width:1100px;
+      overflow:auto; margin:0 auto;
+      animation: slideInLeft 1s cubic-bezier(0.25,1,0.5,1) forwards;
+    }
+
+    .content-panel h1{ margin:0; font-size:50px; font-weight:800; }
+    .content-panel p{ margin:0; font-size:25px; font-weight:700; line-height:1.45; }
+
+    .content-topnote { text-align:left; font-size:16px; color:#fff; }
+    .content-subfooter { margin-top:auto; text-align:left; font-size:16px; color:#fff; }
+    .content-footer { text-align:center; font-size:14px; color:#aaa; }
+
+    /* 📱 Mobil görünüm */
+    @media (max-width:768px){
+      .hamburger{ display:block; }
+      .navbar .right{ 
+        display:none; 
+        flex-direction:column; 
+        background:#111; 
+        position:absolute; 
+        top:var(--nav-height); 
+        right:0; 
+        width:100%; 
+      }
+      .navbar .right.show{ display:flex; }
+      .navbar .left span{ font-size:16px; }
+
+      .content-panel{ padding:20px; border-radius:10px; }
+      .content-panel h1{ font-size:32px; text-align:center; }
+      .content-panel p{ font-size:18px; text-align:center; }
+
+      .center-wrap{ padding:0 8px; }
+    }
+
+    @media (max-width:520px){
+      .navbar .left span{ display:none; }
+      .content-panel{ padding:16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="left">
+      <img src="logo.png" alt="Logo" class="logo-img">
+      <span>Pancakes Web Browser</span>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <nav class="right" id="menu">
+      <a class="nav-link" href="donate.html">Donate</a>
+      <a class="nav-link btn-download" href="download.html">Download</a>
+      <a class="nav-link" href="index.html">Home</a>
+    </nav>
+  </header>
+
+  <main class="stage">
+    <div class="center-wrap">
+      <section class="content-panel" id="homePanel">
+        <h1>A browser that’s light as syrup.</h1>
+        <p>Experience browsing that doesn’t drain your device. Pancakes uses only less RAM, giving you speed and stability even on low‑end machines.</p>
+        <p>Built with simplicity in mind, Pancakes delivers a clean interface that keeps distractions away and lets you focus on what matters.</p>
+        <p>Forget bloated browsers — Pancakes is crafted for performance, simplicity, and a fresh experience.</p>
+
+        <div class="content-topnote"></div>
+
+        <div class="content-subfooter">
+          Created By Neozenas(Adnan)
+        </div>
+
+        <div class="content-footer">
+          © 2026 Pancakes Browser — Neozenas All rights reserved.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function toggleMenu(){
+      document.getElementById("menu").classList.toggle("show");
+    }
+  </script>
+</body>
+</html>

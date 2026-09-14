@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pancakes Web Browser</title>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --nav-height:45px;
+      --bg-start:#ffcc00;
+      --bg-end:#ff6600;
+      --nav-bg:#111;
+      --white:#ffffff;
+      --panel-radius:12px;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      padding:0;
+      font-family: 'Clash Display', sans-serif;
+      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+      color:var(--white);
+      overflow:hidden;
+    }
+
+    .navbar{
+      position:fixed; top:0; left:0; right:0;
+      height:var(--nav-height);
+      background:var(--nav-bg);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 18px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.35);
+      z-index:1000;
+    }
+    .navbar .left{ display:flex; align-items:center; font-weight:700; font-size:20px; color:var(--white); }
+    .navbar .left img.logo-img { height:32px; margin-right:8px; vertical-align:middle; }
+    .navbar .right{ display:flex; gap:10px; }
+    .nav-link{ color:var(--white); text-decoration:none; font-weight:700; font-size:16px; padding:6px 12px; border-radius:8px; transition:all .18s ease; }
+    .nav-link:hover{ background:#ff6a00; color:#111; }
+    .btn-download{ background:#111; color:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.25); }
+    .btn-download:hover{ background:#ff6a00; color:#111; }
+
+    .stage{ height:calc(100vh - var(--nav-height) - 30px); margin-top:calc(var(--nav-height) + 10px); display:flex; align-items:center; justify-content:center; padding:10px; box-sizing:border-box; }
+    .center-wrap{ width:100%; max-width:1100px; display:flex; align-items:stretch; gap:18px; }
+
+    .content-panel {
+      background:#0f0f0f;
+      border-radius:var(--panel-radius);
+      box-shadow:0 10px 30px rgba(0,0,0,0.45);
+      padding:28px;
+      color:var(--white);
+      display:flex; flex-direction:column;
+      gap:14px;
+      min-height:40vh; height:70vh;
+      width:100%;
+      overflow:auto; margin:0 auto;
+      position:relative;
+    }
+
+    .content-panel h1{ margin:0; font-size:50px; font-weight:800; }
+    .content-panel p{ margin:0; font-size:22px; font-weight:600; line-height:1.45; }
+
+    /* Kutular */
+    .download-boxes {
+      display:flex;
+      justify-content:space-between;
+      margin-top:20px;
+    }
+    .box {
+      border-radius:12px;
+      width:30%;
+      height:150px;
+      padding:15px;
+      position:relative;
+      display:flex;
+      flex-direction:column;
+    }
+    .box img { width:50px; height:50px; border-radius:8px; }
+    .box .title { margin-left:75px; margin-top:-50px; font-size:22px; font-weight:800; }
+    .box .bottom { position:absolute; bottom:15px; left:15px; right:15px; display:flex; justify-content:space-between; align-items:center; }
+    .box .subtitle { font-size:16px; font-weight:600; }
+    .box .download-btn {
+      padding:10px 16px;
+      font-size:15px;
+      font-weight:700;
+      color:#111;
+      background: linear-gradient(135deg, #ffcc00, #ff6600);
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      box-shadow:0 3px 8px rgba(0,0,0,0.35);
+      transition:all .2s ease;
+    }
+    .box .download-btn:hover { transform:scale(1.05); }
+
+    /* Renkler */
+    .windows-box { background:#007bff; }
+    .android-box { background:#28a745; }
+    .soon-box { background:#555; }
+
+    /* Uzun ince dikdörtgen */
+    .long-box {
+      margin-top:0px;
+      background:#222;
+      border-radius:8px;
+      height:40px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:16px;
+      font-weight:600;
+      color:#fff;
+    }
+
+    .content-subfooter { margin-top:auto; text-align:left; font-size:16px; color:#fff; }
+    .content-footer { text-align:center; font-size:14px; color:#aaa; }
+
+    /* 📱 Mobil görünüm */
+    @media (max-width: 768px) {
+      .navbar .right { display:none; }
+      .navbar .left span { font-size:16px; }
+
+      .content-panel {
+        padding:20px;
+        border-radius:10px;
+      }
+
+      .content-panel h1 { 
+        font-size:32px; 
+        text-align:center; 
+      }
+      .content-panel p { 
+        font-size:18px; 
+        text-align:center; 
+      }
+
+      .download-boxes {
+        flex-direction:column;
+        gap:20px;
+        align-items:center;
+      }
+      .box {
+        width:90%;
+        height:auto;
+        text-align:center;
+      }
+      .box img { margin:0 auto; }
+      .box .title { margin:10px 0 0 0; font-size:20px; }
+      .box .bottom { 
+        position:static; 
+        margin-top:10px; 
+        flex-direction:column; 
+        align-items:center; 
+        gap:10px; 
+      }
+      .box .download-btn { 
+        width:100%; 
+        max-width:200px; 
+      }
+
+      .long-box {
+        width:90%;
+        margin:20px auto 0 auto;
+        text-align:center;
+      }
+    }
+    /* Hamburger buton */
+.hamburger {
+  display:none;
+  font-size:26px;
+  cursor:pointer;
+  color:#fff;
+}
+
+/* Mobilde menü gizlenir, hamburger görünür */
+@media (max-width:768px){
+  .hamburger{ display:block; }
+  .navbar .right{
+    display:none;
+    flex-direction:column;
+    background:#111;
+    position:absolute;
+    top:var(--nav-height);
+    right:0;
+    width:100%;
+  }
+  .navbar .right.show{ display:flex; }
+}
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="left">
+      <img src="logo.png" alt="Logo" class="logo-img">
+      <span>Pancakes Web Browser</span>
+    </div>
+    <nav class="right">
+      <a class="nav-link" href="donate.html">Donate</a>
+      <a class="nav-link btn-download" href="download.html">Download</a>
+      <a class="nav-link" href="index.html">Home</a>
+    </nav>
+  </header>
+
+  <main class="stage">
+    <div class="center-wrap">
+      <section class="content-panel" id="homePanel">
+        <h1>Download</h1>
+        <p>Choose your platform below to download Pancakes Browser.</p>
+        
+        <div class="download-boxes">
+          <div class="box windows-box">
+            <img src="winlogo.png" alt="Windows Logo">
+            <div class="title">Windows 11/10</div>
+            <div class="bottom">
+              <div class="subtitle">Download setup.exe file</div>
+              <button class="download-btn">Download</button>
+            </div>
+          </div>
+
+          <div class="box android-box">
+            <img src="androidlogo.png" alt="Android Logo">
+            <div class="title">Android</div>
+            <div class="bottom">
+              <div class="subtitle">Download apk file</div>
+              <button class="download-btn">Download</button>
+            </div>
+          </div>
+
+          <div class="box soon-box">
+            <div class="title">Coming out soon</div>
+            <div class="bottom">
+              <div class="subtitle">for Linux / Mac / iOS</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="long-box">
+          Stay tuned for updates
+        </div>
+
+        <div class="content-subfooter">
+          Created By Neozenas(Adnan)
+        </div>
+
+        <div class="content-footer">
+          © 2026 Pancakes Browser — Neozenas All rights reserved.
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
+<header class="navbar">
+  <div class="left">
+    <img src="logo.png" alt="Logo" class="logo-img">
+    <span>Pancakes Web Browser</span>
+  </div>
+
+  <!-- Hamburger buton -->
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+
+  <!-- Menü -->
+  <nav class="right" id="menu">
+    <a class="nav-link" href="donate.html">Donate</a>
+    <a class="nav-link btn-download" href="download.html">Download</a>
+    <a class="nav-link" href="index.html">Home</a>
+  </nav>
+</header>
+
+<script>
+  function toggleMenu(){
+    document.getElementById("menu").classList.toggle("show");
+  }
+</script>
